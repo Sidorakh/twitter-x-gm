@@ -64,11 +64,11 @@ module.exports = class {
                     const stmt = db.prepare(`SELECT * FROM TwitterData WHERE ID=(?)`);
                     const stmt_results = await dbh.stmt_all(stmt,json.id_str);
                     if (stmt_results.length > 0) {
-                        const stmt_update = db.prepare(`UPDATE TwitterData SET Data=(?),AccessToken=(?),AccessSecret=(?) WHERE ID=(?)`);
-                        await dbh.stmt_run(stmt_update,data,req.session.oauth_access_token,req.session.oauth_access_secret,json.id_str);
+                        const stmt_update = db.prepare(`UPDATE TwitterData SET Data=(?) WHERE ID=(?)`);
+                        await dbh.stmt_run(stmt_update,data,json.id_str);
                     } else {
-                        const stmt_insert = db.prepare(`INSERT INTO TwitterData (ID,Data,AccessToken,AccessSecret) VALUES (?,?,?,?)`);
-                        await dbh.stmt_run(stmt_insert,json.id_str,data,req.session.oauth_access_token,req.session.oauth_access_secret);
+                        const stmt_insert = db.prepare(`INSERT INTO TwitterData (ID,Data) VALUES (?,?,?,?)`);
+                        await dbh.stmt_run(stmt_insert,json.id_str,data);
                     }
                     session_id[req.session.token] = json.id_str;
                     res.type('text').send(`Welcome to <GAME NAME>, ${json.name} (${json.screen_name}). You can close this webpage now. `);
