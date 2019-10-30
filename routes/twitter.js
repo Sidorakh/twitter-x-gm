@@ -67,7 +67,7 @@ module.exports = class {
                         const stmt_update = db.prepare(`UPDATE TwitterData SET Data=(?) WHERE ID=(?)`);
                         await dbh.stmt_run(stmt_update,data,json.id_str);
                     } else {
-                        const stmt_insert = db.prepare(`INSERT INTO TwitterData (ID,Data) VALUES (?,?,?,?)`);
+                        const stmt_insert = db.prepare(`INSERT INTO TwitterData (ID,Data) VALUES (?,?)`);
                         await dbh.stmt_run(stmt_insert,json.id_str,data);
                     }
                     session_id[req.session.token] = json.id_str;
