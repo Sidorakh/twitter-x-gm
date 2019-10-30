@@ -84,4 +84,4 @@ typings/
 .dynamodb/
 
 # database
-twitter.db
+user_data.db
