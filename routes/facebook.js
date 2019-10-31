@@ -156,7 +156,7 @@ module.exports = class {
         });
         router.get('/delete-tracker',async (req,res)=>{
             const stmt = db.prepare(`SELECT * FROM FacebookDeletions WHERE ID=(?)`);
-            const result = dbh.stmt_get(stmt,req.query.id);
+            const result = await dbh.stmt_get(stmt,req.query.id);
             res.json(result);
         })
     }
