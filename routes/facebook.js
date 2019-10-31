@@ -115,6 +115,8 @@ module.exports = class {
             const signature = encoded_data[0];
             const user_data = JSON.parse(base64decode(encoded_data[1]));
 
+            console.log(user_data);
+
             if (!user_data.algorithm || user_data.algorithm.toUpperCase != 'HMAC-256') {
                 return res.json({status:'failure',reason:`Unknown algorithm: ${user_data.algorithm}, expected HMAC-256`});
             }
@@ -127,6 +129,7 @@ module.exports = class {
                                                 .replace('=', '');
             //
             if (signature !== expected_signature) {
+                console.log('Signature mismatch');
                 return res.json({status:'failure'})
             }
             
@@ -141,7 +144,7 @@ module.exports = class {
                 stmt_record.finalize();
                 res.json({
                     url:`https://oauth.redshirt.dev/delete-tracker?id=${uuid}`,
-                    confirmation:''
+                    confirmation_code:uuid.replace(/\-\s/g,'')
                 })
             } catch(e) {
                 console.error(e);
