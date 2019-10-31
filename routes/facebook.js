@@ -146,7 +146,7 @@ module.exports = class {
                 console.log(`Deleted record ${user_id} and recorded as ${uuid}`);
                 res.json({
                     url:`https://oauth.redshirt.dev/delete-tracker?id=${uuid}`,
-                    confirmation_code:`del${user_id}`
+                    confirmation_code:uuid.replace(/-/g,'')
                 })
             } catch(e) {
                 console.error(e);
