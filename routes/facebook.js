@@ -136,7 +136,7 @@ module.exports = class {
             
             const user_id = user_data.user_id;
             try {
-                const stmt = db.prepare(`DELETE * FROM FacebookData WHERE ID=(?)`);
+                const stmt = db.prepare(`DELETE FROM FacebookData WHERE ID=(?)`);
                 await dbh.run(stmt,user_id);
                 stmt.finalize();
                 const stmt_record = db.prepare(`INSERT INTO FacebookDeletions (ID,Status) VALUES(?,?)`);
