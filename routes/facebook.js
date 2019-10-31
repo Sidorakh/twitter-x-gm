@@ -118,7 +118,7 @@ module.exports = class {
             console.log(user_data);
 
             if (!user_data.algorithm || user_data.algorithm.toUpperCase() != 'HMAC-SHA256') {
-                console.log(`Algorithm incorrect, got ${user_data.algorithm}, expecting HMAC-SHA256`);
+                //console.log(`Algorithm incorrect, got ${user_data.algorithm}, expecting HMAC-SHA256`);
                 return res.json({status:'failure',reason:`Unknown algorithm: ${user_data.algorithm}, expected HMAC-SHA256`});
             }
 
@@ -130,7 +130,7 @@ module.exports = class {
                                                 .replace('=', '');
             //
             if (signature !== expected_signature) {
-                console.log(`Signature mismatch, got ${signature}, expected ${signature}`);
+                //console.log(`Signature mismatch, got ${signature}, expected ${signature}`);
                 return res.json({status:'failure'})
             }
             
@@ -139,14 +139,14 @@ module.exports = class {
                 const stmt = db.prepare(`DELETE FROM FacebookData WHERE ID=(?)`);
                 await dbh.stmt_run(stmt,user_id);
                 stmt.finalize();
+                const uuid = uuidv4().replace(/-/g,'');
                 const stmt_record = db.prepare(`INSERT INTO FacebookDeletions (ID,Status) VALUES(?,?)`);
-                const uuid = uuidv4();
                 await dbh.stmt_run(stmt_record,uuid,'Deletion successful');
                 stmt_record.finalize();
-                console.log(`Deleted record ${user_id} and recorded as ${uuid}`);
+                //console.log(`Deleted record ${user_id} and recorded as ${uuid}`);
                 res.json({
-                    url:`https://oauth.redshirt.dev/delete-tracker?id=${uuid}`,
-                    confirmation_code:uuid.replace(/-/g,'')
+                    url:`https://oauth.redshirt.dev/facebook/delete-tracker?id=${uuid}`,
+                    confirmation_code:uuid
                 })
             } catch(e) {
                 console.error(e);
