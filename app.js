@@ -36,6 +36,10 @@ db.serialize(async ()=>{
         ID TEXT NOT NULL PRIMARY KEY,
         Status TEXT NOT NULL
     )`);
+    await dbh.run(`CREATE TABLE IF NOT EXISTS RedditData (
+        ID TEXT NOT NULL PRIMARY KEY,
+        Data TEXT NOT NULL
+    )`);
     
 });
 
@@ -44,6 +48,7 @@ const google = new (require('./routes/google.js'))(dbh);
 const discord = new (require('./routes/discord.js'))(dbh);
 const github = new (require('./routes/github.js'))(dbh);
 const facebook = new (require('./routes/facebook.js'))(dbh);
+const reddit = new (require('./routes/reddit.js'))(dbh);
 
 const app = express();
 app.use(body_parser.urlencoded({ extended: true }));
@@ -65,6 +70,7 @@ app.use('/google',google.get_router());
 app.use('/discord',discord.get_router());
 app.use('/github',github.get_router());
 app.use('/facebook',facebook.get_router());
+app.use('/reddit',reddit.get_router());
 
 
 app.listen(process.env.PORT);
