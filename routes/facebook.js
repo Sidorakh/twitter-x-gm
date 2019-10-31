@@ -137,11 +137,11 @@ module.exports = class {
             const user_id = user_data.user_id;
             try {
                 const stmt = db.prepare(`DELETE FROM FacebookData WHERE ID=(?)`);
-                await dbh.run(stmt,user_id);
+                await dbh.stmt_run(stmt,user_id);
                 stmt.finalize();
                 const stmt_record = db.prepare(`INSERT INTO FacebookDeletions (ID,Status) VALUES(?,?)`);
                 const uuid = uuidv4();
-                await dbh.run(stmt_record,uuid,'Deletion successful');
+                await dbh.stmt_run(stmt_record,uuid,'Deletion successful');
                 stmt_record.finalize();
                 console.log(`Deleted record ${user_id} and recorded as ${uuid}`);
                 res.json({
