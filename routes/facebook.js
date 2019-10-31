@@ -14,7 +14,7 @@ function base64decode(data) {
         data += '=';
   }
     data = data.replace(/-/g, '+').replace(/_/g, '/');
-    return new Buffer(data, 'base64').toString('utf-8');
+    return Buffer.from(data, 'base64').toString('utf-8');
 }
 
 module.exports = class {
@@ -141,7 +141,7 @@ module.exports = class {
                 stmt_record.finalize();
                 res.json({
                     url:`https://oauth.redshirt.dev/delete-tracker?id=${uuid}`,
-
+                    confirmation:''
                 })
             } catch(e) {
                 console.error(e);
