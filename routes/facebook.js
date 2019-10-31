@@ -117,8 +117,8 @@ module.exports = class {
 
             console.log(user_data);
 
-            if (!user_data.algorithm || user_data.algorithm.toUpperCase != 'HMAC-SHA256') {
-                console.log('Signature mismatch');
+            if (!user_data.algorithm || user_data.algorithm.toUpperCase() != 'HMAC-SHA256') {
+                console.log(`Algorithm incorrect, got ${user_data.algorithm}, expecting HMAC-SHA256`);
                 return res.json({status:'failure',reason:`Unknown algorithm: ${user_data.algorithm}, expected HMAC-SHA256`});
             }
 
