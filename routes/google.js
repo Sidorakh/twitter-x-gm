@@ -34,7 +34,7 @@ module.exports = class {
             const auth_url = `${openid_config.authorization_endpoint}?client_id=${process.env.GOOGLE_CLIENT_ID}`
                         + `&response_type=code`
                         + `&scope=openid%20email%20profile`
-                        + `&redirect_uri=${encodeURIComponent("http://lvh.me:3000/google/callback")}`
+                        + `&redirect_uri=${encodeURIComponent(process.env.GOOGLE_CALLBACK)}`
                         + `&state=${req.query.token}`
                         + `&nonce=${uuidv4()}`;
             res.redirect(auth_url);
