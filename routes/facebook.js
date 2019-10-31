@@ -2,12 +2,20 @@ const express = require('express');
 const uuidv4 = require('uuid/v4');
 const rp = require('request-promise');
 const qs = require('qs');
+const crypto = require('crypto');
 const axios = require('axios').default;
 const session_keys = {};
 const session_id = {};
 
 const auth_url='https://www.facebook.com/v5.0/dialog/oauth'
 
+function base64decode(data) {
+    while (data.length % 4 !== 0){
+        data += '=';
+  }
+    data = data.replace(/-/g, '+').replace(/_/g, '/');
+    return new Buffer(data, 'base64').toString('utf-8');
+}
 
 module.exports = class {
     constructor(dbh) {
@@ -102,11 +110,49 @@ module.exports = class {
         
             }
         });
-        router.post('/delete-callback',(req,res)=>{
+        router.post('/delete-callback',async (req,res)=>{
+            const encoded_data = req.body.signed_request.split('.');
+            const signature = encoded_data[0];
+            const user_data = JSON.parse(base64decode(encoded_data[1]));
+
+            if (!user_data.algorithm || user_data.algorithm.toUpperCase != 'HMAC-256') {
+                return res.json({status:'failure',reason:`Unknown algorithm: ${user_data.algorithm}, expected HMAC-256`});
+            }
+
+            const expected_signature = crypto.createHmac('sha256',process.env.FACEBOOK_SECRET_ID)
+                                                .update(encoded_data[1])
+                                                .digest('base64')
+                                                .replace(/\+/g, '-')
+                                                .replace(/\//g, '_')
+                                                .replace('=', '');
+            //
+            if (signature !== expected_signature) {
+                return res.json({status:'failure'})
+            }
+            
+            const user_id = user_data.user_id;
+            try {
+                const stmt = db.prepare(`DELETE * FROM FacebookData WHERE ID=(?)`);
+                await dbh.run(stmt,user_id);
+                stmt.finalize();
+                const stmt_record = db.prepare(`INSERT INTO FacebookDeletions (ID,Status) VALUES(?,?)`);
+                const uuid = uuidv4();
+                await dbh.run(stmt_record,uuid,'Deletion successful');
+                stmt_record.finalize();
+                res.json({
+                    url:`https://oauth.redshirt.dev/delete-tracker?id=${uuid}`,
+
+                })
+            } catch(e) {
+                console.error(e);
+            }
+
 
         });
-        router.get('/delete-tracker',(req,res)=>{
-
+        router.get('/delete-tracker',async (req,res)=>{
+            const stmt = db.prepare(`SELECT * FROM FacebookDeletions WHERE ID=(?)`);
+            const result = dbh.stmt_get(stmt,req.query.id);
+            res.json(result);
         })
     }
     get_router() {
