@@ -43,12 +43,7 @@ db.serialize(async ()=>{
     
 });
 
-const twitter = new (require('./routes/twitter.js'))(dbh);
-const google = new (require('./routes/google.js'))(dbh);
-const discord = new (require('./routes/discord.js'))(dbh);
-const github = new (require('./routes/github.js'))(dbh);
-const facebook = new (require('./routes/facebook.js'))(dbh);
-const reddit = new (require('./routes/reddit.js'))(dbh);
+
 
 const app = express();
 app.use(body_parser.urlencoded({ extended: true }));
@@ -64,6 +59,17 @@ app.use(function(req, res, next) {
 app.get('/', (req,res)=>{
     res.type('text').send('Hello, world');
 });
+
+
+/* 
+ *  Services block 
+ */
+const twitter = new (require('./routes/twitter.js'))(dbh);
+const google = new (require('./routes/google.js'))(dbh);
+const discord = new (require('./routes/discord.js'))(dbh);
+const github = new (require('./routes/github.js'))(dbh);
+const facebook = new (require('./routes/facebook.js'))(dbh);
+const reddit = new (require('./routes/reddit.js'))(dbh);
 
 app.use('/twitter',twitter.get_router());
 app.use('/google',google.get_router());
