@@ -130,7 +130,7 @@ module.exports = class {
                                                 .replace('=', '');
             //
             if (signature !== expected_signature) {
-                console.log('Signature mismatch');
+                console.log(`Signature mismatch, got ${signature}, expected ${signature}`);
                 return res.json({status:'failure'})
             }
             
