@@ -142,9 +142,10 @@ module.exports = class {
                 const uuid = uuidv4();
                 await dbh.run(stmt_record,uuid,'Deletion successful');
                 stmt_record.finalize();
+                console.log(`Deleted record ${user_id} and recorded as ${uuid}`);
                 res.json({
                     url:`https://oauth.redshirt.dev/delete-tracker?id=${uuid}`,
-                    confirmation_code:uuid.replace(/\-\s/g,'')
+                    confirmation_code:`del${user_id}`
                 })
             } catch(e) {
                 console.error(e);
