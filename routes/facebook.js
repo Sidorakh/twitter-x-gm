@@ -91,7 +91,7 @@ module.exports = class {
             if (id == undefined) {
                 res.type('json').send({status:'wait'});
             } else {
-                const stmt = db.prepare(`SELECT * FROM GithubData WHERE ID=(?)`);
+                const stmt = db.prepare(`SELECT * FROM FacebookData WHERE ID=(?)`);
                 const record = await dbh.stmt_get(stmt,id);
                 stmt.finalize();
                 if (record) {
