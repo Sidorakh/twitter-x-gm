@@ -117,8 +117,9 @@ module.exports = class {
 
             console.log(user_data);
 
-            if (!user_data.algorithm || user_data.algorithm.toUpperCase != 'HMAC-256') {
-                return res.json({status:'failure',reason:`Unknown algorithm: ${user_data.algorithm}, expected HMAC-256`});
+            if (!user_data.algorithm || user_data.algorithm.toUpperCase != 'HMAC-SHA256') {
+                console.log('Signature mismatch');
+                return res.json({status:'failure',reason:`Unknown algorithm: ${user_data.algorithm}, expected HMAC-SHA256`});
             }
 
             const expected_signature = crypto.createHmac('sha256',process.env.FACEBOOK_SECRET_ID)
