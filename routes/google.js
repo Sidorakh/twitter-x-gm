@@ -66,7 +66,8 @@ module.exports = class {
                 },
                 method:'post',
                 headers:{
-                    Accept:'application/json'
+                    Accept:'application/json',
+                    'User-Agent':process.env.APPLICATION_USER_AGENT
                 }
             }));
 

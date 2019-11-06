@@ -51,6 +51,9 @@ module.exports = class {
                     code:req.query.code,
                     grant_type:'authorization_code',
                     scopes:'identify email'
+                },
+                headers: {
+                    'User-Agent':process.env.APPLICATION_USER_AGENT
                 }
             }));
             

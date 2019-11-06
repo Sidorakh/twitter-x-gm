@@ -51,7 +51,7 @@ module.exports = class {
                 return res.type('text').send('Authentication failed - invalid state parameter');
             }
             const user_auth = JSON.parse(await rp('https://graph.facebook.com/v5.0/oauth/access_token',{
-                method:'post',
+                method:'get',
                 form:{
                     client_id:process.env.FACEBOOK_CLIENT_ID,
                     client_secret:process.env.FACEBOOK_SECRET_ID,
@@ -65,7 +65,7 @@ module.exports = class {
                     'User-Agent':process.env.APPLICATION_USER_AGENT
                 }
             }));
-            const user_data = JSON.parse( await rp('https://graph.facebook.com//me',{
+            const user_data = JSON.parse( await rp('https://graph.facebook.com/me',{
                 qs:{
                     fields:'id,name,picture',
                     access_token:user_auth.access_token
