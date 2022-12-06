@@ -21,7 +21,7 @@
     "form-data": "^2.5.1",
     "googleapis": "^44.0.0",
     "oauth": "^0.9.15",
-    "qs": "^6.9.0",
+    "qs": "^6.9.7",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "sqlite3": "^4.1.0",
